@@ -1,0 +1,14 @@
+{
+  "name": "askout",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "sites/*"
+  ],
+  "scripts": {
+    "dev:hoco": "npm run dev -w sites/hoco",
+    "build": "npm run build --workspaces --if-present && node scripts/postbuild.js",
+    "preview:hoco": "npm run preview -w sites/hoco"
+  }
+}

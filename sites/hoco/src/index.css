@@ -1,0 +1,44 @@
+:root {
+  --maroon: #5c1420;
+  --maroon-deep: #3d0d16;
+  --gold: #f2c14e;
+  --gold-bright: #ffd873;
+  --cream: #f3e8ce;
+  --paper: #ece0c4;
+  --ink: #241209;
+
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--maroon-deep);
+  color: var(--ink);
+  font-family: 'Archivo', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+button {
+  font-family: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--maroon-deep);
+}
