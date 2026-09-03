@@ -201,9 +201,7 @@ export default function App() {
               </p>
             </div>
 
-            <p className="stub">
-              CONTAINS: CHOCOLATE, HUGS &amp; ZERO CHILL &middot; DRESS SHARP
-            </p>
+            <p className="stub">CONTAINS: CHOCOLATE &amp; HUGS</p>
           </div>
         )}
 

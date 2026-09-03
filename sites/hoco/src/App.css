@@ -127,8 +127,18 @@
 
 .hilite {
   color: var(--caramel);
-  -webkit-text-stroke: 2px var(--ink);
-  text-shadow: none;
+  /* A real stroke (-webkit-text-stroke) self-intersects on this font's bold,
+     rounded glyphs — shows as a hashed box on letters like H and D. Faking
+     an outline with offset shadows instead avoids stroking the glyph path. */
+  text-shadow:
+    -2px -2px 0 var(--ink),
+    2px -2px 0 var(--ink),
+    -2px 2px 0 var(--ink),
+    2px 2px 0 var(--ink),
+    -2px 0 0 var(--ink),
+    2px 0 0 var(--ink),
+    0 -2px 0 var(--ink),
+    0 2px 0 var(--ink);
 }
 
 .note {
