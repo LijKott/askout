@@ -7,7 +7,7 @@ import { join } from 'node:path'
 
 const root = new URL('..', import.meta.url).pathname
 const distDir = join(root, 'dist')
-const domain = 'askout.elijah.com'
+const domain = 'askout.elijahkott.com'
 
 mkdirSync(distDir, { recursive: true })
 

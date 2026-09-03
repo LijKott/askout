@@ -1,31 +1,22 @@
 # Deployment
 
-Each "ask" lives at `askout.elijah.com/<the-date>` (e.g. `/hoco`), all served
-from this one repo on GitHub Pages. Two things need doing once, by hand,
-since they require access to accounts this environment doesn't have.
+Each "ask" lives at `askout.elijahkott.com/<the-date>` (e.g. `/hoco`), all
+served from this one repo on GitHub Pages.
 
-## 1. Turn on GitHub Pages (GitHub Actions source)
+**Live:** https://askout.elijahkott.com/hoco/
 
-In the repo on GitHub: **Settings → Pages → Build and deployment → Source**,
-set it to **GitHub Actions**. That's it — `.github/workflows/deploy.yml`
-handles the rest on every push to `main`.
+## Status
 
-## 2. Point the domain at GitHub Pages (Cloudflare)
+- **GitHub Pages** — on, source is GitHub Actions. `.github/workflows/deploy.yml`
+  builds and deploys on every push to `main`.
+- **Domain** — `askout.elijahkott.com` is already CNAMEd to `lijkott.github.io`
+  in Cloudflare DNS, and GitHub has an approved HTTPS cert for it
+  ("Enforce HTTPS" is on). Nothing left to configure here.
 
-In the Cloudflare dashboard, in the `elijah.com` zone's **DNS** tab, add:
-
-| Type  | Name     | Content              | Proxy status |
-| ----- | -------- | --------------------- | ------------ |
-| CNAME | `askout` | `lijkott.github.io`   | DNS only (grey cloud) — see note below |
-
-Leave it **DNS only** until GitHub finishes issuing the HTTPS certificate for
-the domain (check **Settings → Pages** on the repo — it'll show a green
-"Enforce HTTPS" checkbox once ready, usually within a few minutes to an
-hour). Only switch the record to **Proxied** (orange cloud) after that; if
-Cloudflare proxies it before GitHub has verified the domain, cert issuance
-fails.
-
-Once "Enforce HTTPS" is available, turn it on.
+  (Note: the original draft of this doc assumed `askout.elijah.com`, per an
+  early note in the repo's README — that domain isn't one this account
+  controls. The DNS was actually already set up for `elijahkott.com`, which
+  matches the GitHub account, so that's the real domain in use.)
 
 ## Adding another site later
 
