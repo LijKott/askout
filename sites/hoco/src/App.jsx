@@ -43,21 +43,45 @@ export default function App() {
     setAccepted(true)
   }
 
-  function dodge() {
+  function dodge(e) {
+    // Fires on tap-down (before the click "lands") so it reads as dodging
+    // the touch itself, not just reacting after the fact.
+    e.preventDefault()
     if (dodges >= MAX_DODGES) return
     const stage = stageRef.current
     const btn = noRef.current
     if (!stage || !btn) return
 
     const stageRect = stage.getBoundingClientRect()
-    const btnRect = btn.getBoundingClientRect()
-    const maxLeft = Math.max(stageRect.width - btnRect.width, 0)
-    const maxTop = Math.max(stageRect.height - btnRect.height, 0)
+    // offsetWidth/Height are the unscaled layout box — getBoundingClientRect
+    // would report the shrunken post-`transform: scale()` size instead, which
+    // under-bounds where the (unscaled) left/top we're about to set can land.
+    const btnWidth = btn.offsetWidth
+    const btnHeight = btn.offsetHeight
+    // Bound by whatever's actually on screen right now, not the stage's full
+    // box — on a short phone the stage can run past the fold, and a button
+    // that "dodges" there reads as vanishing instead of dodging.
+    const visibleWidth = Math.max(Math.min(stageRect.right, window.innerWidth) - stageRect.left, 0)
+    const visibleHeight = Math.max(Math.min(stageRect.bottom, window.innerHeight) - stageRect.top, 0)
+    const maxLeft = Math.max(visibleWidth - btnWidth, 0)
+    const maxTop = Math.max(visibleHeight - btnHeight, 0)
 
-    setNoPos({
-      left: Math.random() * maxLeft,
-      top: Math.random() * maxTop,
-    })
+    // A thumb covers far more area than a cursor, so a "random" spot often
+    // lands right back under it. Force real distance from wherever it is now.
+    const prev = noPos ?? { left: maxLeft / 2, top: maxTop / 2 }
+    const minDistance = Math.min(stageRect.width, stageRect.height) * 0.4
+    let next = prev
+    for (let attempt = 0; attempt < 8; attempt++) {
+      const candidate = { left: Math.random() * maxLeft, top: Math.random() * maxTop }
+      const dist = Math.hypot(candidate.left - prev.left, candidate.top - prev.top)
+      if (dist >= minDistance) {
+        next = candidate
+        break
+      }
+      next = candidate
+    }
+
+    setNoPos(next)
     setDodges((d) => Math.min(d + 1, MAX_DODGES))
   }
 
@@ -95,7 +119,7 @@ export default function App() {
         ))}
       </div>
 
-      <main className="ticket" ref={stageRef}>
+      <main className="ticket">
         <span className="stamp">SAVE&nbsp;THE&nbsp;DATE</span>
 
         <div className="checker checker-top" aria-hidden="true" />
@@ -114,7 +138,7 @@ export default function App() {
               fair warning: the &ldquo;no&rdquo; button doesn&rsquo;t really work
             </p>
 
-            <div className="stage">
+            <div className="stage" ref={stageRef}>
               <button className="btn btn-yes" onClick={accept}>
                 YES!!
               </button>
@@ -124,7 +148,7 @@ export default function App() {
                   ref={noRef}
                   className="btn btn-no"
                   onMouseEnter={dodge}
-                  onClick={dodge}
+                  onPointerDown={dodge}
                   style={
                     noPos
                       ? {

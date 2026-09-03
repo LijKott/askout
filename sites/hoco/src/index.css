@@ -26,6 +26,7 @@ body {
   font-family: 'Archivo', sans-serif;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  overscroll-behavior-y: none;
 }
 
 #root {
