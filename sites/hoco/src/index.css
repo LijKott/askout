@@ -1,11 +1,11 @@
 :root {
-  --maroon: #5c1420;
-  --maroon-deep: #3d0d16;
-  --gold: #f2c14e;
-  --gold-bright: #ffd873;
-  --cream: #f3e8ce;
-  --paper: #ece0c4;
-  --ink: #241209;
+  --cocoa: #2b160c;
+  --cocoa-mid: #6b3a22;
+  --ink: #3b1f0f;
+  --caramel: #d9a441;
+  --caramel-bright: #f4c464;
+  --cream: #fbeeda;
+  --blush: #e8a7a0;
 
   color-scheme: light;
 }
@@ -21,7 +21,7 @@ body {
 }
 
 body {
-  background: var(--maroon-deep);
+  background: var(--cocoa);
   color: var(--ink);
   font-family: 'Archivo', sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -40,6 +40,6 @@ button {
 }
 
 ::selection {
-  background: var(--gold);
-  color: var(--maroon-deep);
+  background: var(--caramel);
+  color: var(--cocoa);
 }

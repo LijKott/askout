@@ -13,20 +13,25 @@ const NO_LABELS = [
 
 const MAX_DODGES = NO_LABELS.length - 1
 
-const CONFETTI_COLORS = ['#f2c14e', '#ffd873', '#f3e8ce', '#8a2332', '#fff6df']
+const CONFETTI_COLORS = ['#6b3a22', '#d9a441', '#f4c464', '#fbeeda', '#8a4a2a']
+const CONFETTI_EMOJI = ['🍫', '🤎']
 
 function makeConfetti() {
-  return Array.from({ length: 90 }, (_, i) => ({
-    id: i,
-    left: Math.random() * 100,
-    delay: Math.random() * 0.7,
-    duration: 2.6 + Math.random() * 2,
-    rotate: Math.round(Math.random() * 720 - 360),
-    drift: Math.round((Math.random() - 0.5) * 220),
-    size: 6 + Math.random() * 9,
-    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
-    round: Math.random() > 0.5,
-  }))
+  return Array.from({ length: 80 }, (_, i) => {
+    const isEmoji = Math.random() < 0.18
+    return {
+      id: i,
+      left: Math.random() * 100,
+      delay: Math.random() * 0.7,
+      duration: 2.6 + Math.random() * 2,
+      rotate: Math.round(Math.random() * 720 - 360),
+      drift: Math.round((Math.random() - 0.5) * 220),
+      size: isEmoji ? 16 + Math.random() * 8 : 6 + Math.random() * 9,
+      color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],
+      round: Math.random() > 0.5,
+      emoji: isEmoji ? CONFETTI_EMOJI[i % CONFETTI_EMOJI.length] : null,
+    }
+  })
 }
 
 export default function App() {
@@ -96,19 +101,22 @@ export default function App() {
           {confetti.map((c) => (
             <span
               key={c.id}
-              className="confetti-piece"
+              className={c.emoji ? 'confetti-piece is-emoji' : 'confetti-piece'}
               style={{
                 left: `${c.left}%`,
-                width: c.size,
-                height: c.round ? c.size : c.size * 1.6,
-                background: c.color,
-                borderRadius: c.round ? '50%' : '2px',
+                width: c.emoji ? 'auto' : c.size,
+                height: c.emoji ? 'auto' : c.round ? c.size : c.size * 1.6,
+                fontSize: c.emoji ? c.size : undefined,
+                background: c.emoji ? 'none' : c.color,
+                borderRadius: c.emoji ? 0 : c.round ? '50%' : '2px',
                 animationDelay: `${c.delay}s`,
                 animationDuration: `${c.duration}s`,
                 '--drift': `${c.drift}px`,
                 '--rot': `${c.rotate}deg`,
               }}
-            />
+            >
+              {c.emoji}
+            </span>
           ))}
         </div>
       )}
@@ -120,13 +128,12 @@ export default function App() {
       </div>
 
       <main className="ticket">
-        <span className="stamp">SAVE&nbsp;THE&nbsp;DATE</span>
-
         <div className="checker checker-top" aria-hidden="true" />
 
         {!accepted ? (
           <>
             <p className="eyebrow">HOMECOMING &middot; 2026</p>
+            <p className="greeting">hey tait-er tot,</p>
             <h1 className="headline">
               WILL YOU
               <br />
@@ -135,7 +142,7 @@ export default function App() {
               WITH ME?
             </h1>
             <p className="note">
-              fair warning: the &ldquo;no&rdquo; button doesn&rsquo;t really work
+              fair warning: the &ldquo;no&rdquo; button melts under pressure
             </p>
 
             <div className="stage" ref={stageRef}>
@@ -163,13 +170,13 @@ export default function App() {
                   {noLabel}
                 </button>
               ) : (
-                <p className="no-retired">(the no button has left the venue)</p>
+                <p className="no-retired">(the no button melted completely)</p>
               )}
             </div>
 
             <p className="stub">
-              ADMIT ONE &middot; GOOD FOR ONE (1) HOMECOMING &middot; NO REFUNDS ON
-              FEELINGS
+              INGREDIENTS: CHOCOLATE + YOU &middot; NET WT: ALL MY HEART &middot; NO
+              REFUNDS ON FEELINGS
             </p>
           </>
         ) : (
@@ -177,10 +184,26 @@ export default function App() {
             <p className="eyebrow">IT&rsquo;S OFFICIAL</p>
             <h1 className="headline">
               IT&rsquo;S A<br />
-              <span className="hilite">DATE!</span> 🎉
+              <span className="hilite">DATE!</span> 🍫
             </h1>
-            <p className="note">can&rsquo;t wait to dance with you at hoco</p>
-            <p className="stub">SEE YOU THERE &middot; DRESS SHARP &middot; BE PRESENT</p>
+            <p className="note">
+              get ready for a serious chocolate delivery, tait-er tot
+            </p>
+
+            <div className="coupon">
+              <span className="coupon-icon" aria-hidden="true">
+                🤗
+              </span>
+              <p className="coupon-title">10 Free Hugs</p>
+              <p className="coupon-fine">
+                never expires &middot; redeemable any time &middot; chocolate sold
+                separately (but coming anyway)
+              </p>
+            </div>
+
+            <p className="stub">
+              CONTAINS: CHOCOLATE, HUGS &amp; ZERO CHILL &middot; DRESS SHARP
+            </p>
           </div>
         )}
 
