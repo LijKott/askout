@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react'
 import './App.css'
+import { downloadHugCoupon } from './couponImage.js'
 
 const NO_LABELS = [
   'no',
@@ -39,6 +40,7 @@ export default function App() {
   const [dodges, setDodges] = useState(0)
   const [noPos, setNoPos] = useState(null)
   const [confetti, setConfetti] = useState([])
+  const [couponSaved, setCouponSaved] = useState(false)
 
   const stageRef = useRef(null)
   const noRef = useRef(null)
@@ -46,6 +48,12 @@ export default function App() {
   function accept() {
     setConfetti(makeConfetti())
     setAccepted(true)
+  }
+
+  async function saveCoupon() {
+    await downloadHugCoupon()
+    setCouponSaved(true)
+    setTimeout(() => setCouponSaved(false), 2500)
   }
 
   function dodge(e) {
@@ -190,7 +198,7 @@ export default function App() {
               get ready for a serious chocolate delivery, tait-er tot
             </p>
 
-            <div className="coupon">
+            <button type="button" className="coupon" onClick={saveCoupon}>
               <span className="coupon-icon" aria-hidden="true">
                 🤗
               </span>
@@ -199,7 +207,10 @@ export default function App() {
                 never expires &middot; redeemable any time &middot; chocolate sold
                 separately (but coming anyway)
               </p>
-            </div>
+              <p className="coupon-hint">
+                {couponSaved ? 'saved! check your downloads 🎉' : '↓ tap to save this coupon'}
+              </p>
+            </button>
 
             <p className="stub">CONTAINS: CHOCOLATE &amp; HUGS</p>
           </div>
